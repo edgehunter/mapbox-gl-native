@@ -5,9 +5,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.Size;
 
+import com.google.gson.JsonArray;
 import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -101,10 +103,6 @@ public class Expression {
     return new ExpressionLiteral(bool);
   }
 
-  //
-  // Types
-  //
-
   /**
    * Create a literal object expression.
    *
@@ -158,10 +156,6 @@ public class Expression {
   public static Expression rgb(@NonNull Number red, @NonNull Number green, @NonNull Number blue) {
     return rgb(literal(red), literal(green), literal(blue));
   }
-
-  //
-  // Literals
-  //
 
   /**
    * Creates a color value from red, green, blue components, which must range between 0 and 255,
@@ -223,10 +217,6 @@ public class Expression {
   public static Expression eq(@NonNull Expression compareOne, @NonNull Expression compareTwo) {
     return new Expression("==", compareOne, compareTwo);
   }
-
-  //
-  // Color
-  //
 
   /**
    * Returns true if the input values are equal, false otherwise.
@@ -300,10 +290,6 @@ public class Expression {
   public static Expression neq(@NonNull String compareOne, @NonNull String compareTwo) {
     return new Expression("!=", literal(compareOne), literal(compareTwo));
   }
-
-  //
-  // Decision
-  //
 
   /**
    * Returns `true` if the input values are not equal, `false` otherwise.
@@ -477,7 +463,6 @@ public class Expression {
    * @return expression
    * @see <a href="https://www.mapbox.com/mapbox-gl-js/style-spec/#expressions-all">Style specification</a>
    */
-   
   public static Expression all(@NonNull Expression... input) {
     return new Expression("all", input);
   }
@@ -494,7 +479,6 @@ public class Expression {
    * @return expression
    * @see <a href="https://www.mapbox.com/mapbox-gl-js/style-spec/#expressions-any">Style specification</a>
    */
-   
   public static Expression any(@NonNull Expression... input) {
     return new Expression("any", input);
   }
@@ -532,7 +516,6 @@ public class Expression {
    * @return expression
    * @see <a href="https://www.mapbox.com/mapbox-gl-js/style-spec/#expressions-case">Style specification</a>
    */
-   
   public static Expression switchCase(@NonNull @Size(min = 1) Expression... input) {
     return new Expression("case", input);
   }
@@ -661,10 +644,6 @@ public class Expression {
     return new Expression("get", input);
   }
 
-  //
-  // FeatureData
-  //
-
   /**
    * Retrieves a property value from the current feature's properties,
    * or from another object if a second argument is provided.
@@ -704,10 +683,6 @@ public class Expression {
     return get(literal(key), object);
   }
 
-  //
-  // Heatmap
-  //
-
   /**
    * Tests for the presence of an property value in the current feature's properties.
    *
@@ -718,10 +693,6 @@ public class Expression {
   public static Expression has(@NonNull Expression key) {
     return new Expression("has", key);
   }
-
-  //
-  // Lookup
-  //
 
   /**
    * Tests for the presence of an property value in the current feature's properties.
@@ -817,7 +788,6 @@ public class Expression {
    * @return expression
    * @see <a href="https://www.mapbox.com/mapbox-gl-js/style-spec/#expressions-+">Style specification</a>
    */
-   
   public static Expression sum(@Size(min = 2) Expression... numbers) {
     return new Expression("+", numbers);
   }
@@ -829,7 +799,6 @@ public class Expression {
    * @return expression
    * @see <a href="https://www.mapbox.com/mapbox-gl-js/style-spec/#expressions-+">Style specification</a>
    */
-
   public static Expression sum(@Size(min = 2) Number... numbers) {
     Expression[] numberExpression = new Expression[numbers.length];
     for (int i = 0; i < numbers.length; i++) {
@@ -845,7 +814,6 @@ public class Expression {
    * @return expression
    * @see <a href="https://www.mapbox.com/mapbox-gl-js/style-spec/#expressions-*">Style specification</a>
    */
-   
   public static Expression product(@Size(min = 2) Expression... numbers) {
     return new Expression("*", numbers);
   }
@@ -857,7 +825,6 @@ public class Expression {
    * @return expression
    * @see <a href="https://www.mapbox.com/mapbox-gl-js/style-spec/#expressions-*">Style specification</a>
    */
-
   public static Expression product(@Size(min = 2) Number... numbers) {
     Expression[] numberExpression = new Expression[numbers.length];
     for (int i = 0; i < numbers.length; i++) {
@@ -865,10 +832,6 @@ public class Expression {
     }
     return product(numberExpression);
   }
-
-  //
-  // Math
-  //
 
   /**
    * Returns the result of subtracting a number from 0.
@@ -1215,7 +1178,6 @@ public class Expression {
    * @return expression
    * @see <a href="https://www.mapbox.com/mapbox-gl-js/style-spec/#expressions-min">Style specification</a>
    */
-   
   public static Expression min(@Size(min = 1) Expression... numbers) {
     return new Expression("min", numbers);
   }
@@ -1227,7 +1189,6 @@ public class Expression {
    * @return expression
    * @see <a href="https://www.mapbox.com/mapbox-gl-js/style-spec/#expressions-min">Style specification</a>
    */
-
   public static Expression min(@Size(min = 1) Number... numbers) {
     Expression[] numberExpression = new Expression[numbers.length];
     for (int i = 0; i < numbers.length; i++) {
@@ -1243,7 +1204,6 @@ public class Expression {
    * @return expression
    * @see <a href="https://www.mapbox.com/mapbox-gl-js/style-spec/#expressions-max">Style specification</a>
    */
-   
   public static Expression max(@Size(min = 1) Expression... numbers) {
     return new Expression("max", numbers);
   }
@@ -1255,7 +1215,6 @@ public class Expression {
    * @return expression
    * @see <a href="https://www.mapbox.com/mapbox-gl-js/style-spec/#expressions-max">Style specification</a>
    */
-
   public static Expression max(@Size(min = 1) Number... numbers) {
     Expression[] numberExpression = new Expression[numbers.length];
     for (int i = 0; i < numbers.length; i++) {
@@ -1331,7 +1290,6 @@ public class Expression {
    * @return expression
    * @see <a href="https://www.mapbox.com/mapbox-gl-js/style-spec/#expressions-concat">Style specification</a>
    */
-   
   public static Expression concat(@NonNull Expression... input) {
     return new Expression("concat", input);
   }
@@ -1364,10 +1322,6 @@ public class Expression {
   public static Expression array(@NonNull Expression input) {
     return new Expression("array", input);
   }
-
-  //
-  // String
-  //
 
   /**
    * Returns a string describing the type of the given value.
@@ -1448,10 +1402,6 @@ public class Expression {
     return new Expression("to-string", input);
   }
 
-  //
-  // Types
-  //
-
   /**
    * Converts the input value to a number, if possible.
    * If the input is null or false, the result is 0.
@@ -1501,7 +1451,6 @@ public class Expression {
    * @return expression
    * @see <a href="https://www.mapbox.com/mapbox-gl-js/style-spec/#expressions-let">Style specification</a>
    */
-   
   public static Expression let(@Size(min = 1) Expression... input) {
     return new Expression("let", input);
   }
@@ -1565,7 +1514,6 @@ public class Expression {
    * @return expression
    * @see <a href="https://www.mapbox.com/mapbox-gl-js/style-spec/#expressions-step">Style specification</a>
    */
-   
   public static Expression step(@NonNull Number input, @NonNull Expression expression, Expression... stops) {
     return step(literal(input), expression, stops);
   }
@@ -1582,15 +1530,10 @@ public class Expression {
    * @return expression
    * @see <a href="https://www.mapbox.com/mapbox-gl-js/style-spec/#expressions-step">Style specification</a>
    */
-   
   public static Expression step(@NonNull Expression input, @NonNull Expression expression, Expression... stops) {
     return new Expression("step", join(new Expression[] {input, expression}, stops));
   }
 
-  //
-  // Variable binding
-  //
-
   /**
    * Produces discrete, stepped results by evaluating a piecewise-constant function defined by pairs of
    * input and output values (\"stops\"). The `input` may be any numeric expression (e.g., `[\"get\", \"population\"]`).
@@ -1603,14 +1546,8 @@ public class Expression {
    * @return expression
    * @see <a href="https://www.mapbox.com/mapbox-gl-js/style-spec/#expressions-step">Style specification</a>
    */
-   
   public static Expression step(@NonNull Number input, @NonNull Expression expression, Stop... stops) {
-    Expression[] expressions = new Expression[stops.length * 2];
-    for (int i = 0; i < stops.length; i++) {
-      expressions[i * 2] = literal(stops[i].value);
-      expressions[i * 2 + 1] = literal(stops[i].output);
-    }
-    return step(literal(input), expression, expressions);
+    return step(literal(input), expression, Stop.toExpressionArray(stops));
   }
 
   /**
@@ -1625,14 +1562,8 @@ public class Expression {
    * @return expression
    * @see <a href="https://www.mapbox.com/mapbox-gl-js/style-spec/#expressions-step">Style specification</a>
    */
-   
   public static Expression step(@NonNull Expression input, @NonNull Expression expression, Stop... stops) {
-    Expression[] expressions = new Expression[stops.length * 2];
-    for (int i = 0; i < stops.length; i++) {
-      expressions[i * 2] = literal(stops[i].value);
-      expressions[i * 2 + 1] = literal(stops[i].output);
-    }
-    return step(input, expression, expressions);
+    return step(input, expression, Stop.toExpressionArray(stops));
   }
 
   /**
@@ -1647,16 +1578,11 @@ public class Expression {
    * @return expression
    * @see <a href="https://www.mapbox.com/mapbox-gl-js/style-spec/#expressions-interpolate">Style specification</a>
    */
-   
   public static Expression interpolate(@NonNull Interpolator interpolation,
                                        @NonNull Expression number, Expression... stops) {
     return new Expression("interpolate", join(new Expression[] {interpolation, number}, stops));
   }
 
-  //
-  // Zoom
-  //
-
   /**
    * Produces continuous, smooth results by interpolating between pairs of input and output values (\"stops\").
    * The `input` may be any numeric expression (e.g., `[\"get\", \"population\"]`).
@@ -1669,20 +1595,10 @@ public class Expression {
    * @return expression
    * @see <a href="https://www.mapbox.com/mapbox-gl-js/style-spec/#expressions-interpolate">Style specification</a>
    */
-   
   public static Expression interpolate(@NonNull Interpolator interpolation,
                                        @NonNull Expression number, Stop... stops) {
-    Expression[] expressions = new Expression[stops.length * 2];
-    for (int i = 0; i < stops.length; i++) {
-      expressions[i * 2] = literal(stops[i].value);
-      expressions[i * 2 + 1] = literal(stops[i].output);
-    }
-    return interpolate(interpolation, number, expressions);
+    return interpolate(interpolation, number, Stop.toExpressionArray(stops));
   }
-
-  //
-  // Ramps, scales, curves
-  //
 
   /**
    * interpolates linearly between the pair of stops just less than and just greater than the input.
@@ -1733,7 +1649,7 @@ public class Expression {
    * @see <a href="https://www.mapbox.com/mapbox-gl-js/style-spec/#expressions-interpolate">Style specification</a>
    */
   public static Interpolator cubicBezier(@NonNull Expression x1, @NonNull Expression y1,
-                                       @NonNull Expression x2, @NonNull Expression y2) {
+                                         @NonNull Expression x2, @NonNull Expression y2) {
     return new Interpolator("cubic-bezier", x1, y1, x2, y2);
   }
 
@@ -1748,7 +1664,7 @@ public class Expression {
    * @see <a href="https://www.mapbox.com/mapbox-gl-js/style-spec/#expressions-interpolate">Style specification</a>
    */
   public static Interpolator cubicBezier(@NonNull Number x1, @NonNull Number y1,
-                                       @NonNull Number x2, @NonNull Number y2) {
+                                         @NonNull Number x2, @NonNull Number y2) {
     return cubicBezier(literal(x1), literal(y1), literal(x2), literal(y2));
   }
 
@@ -1835,32 +1751,114 @@ public class Expression {
   }
 
   /**
+   * Indicates whether some other object is "equal to" this one.
+   *
+   * @param o the other object
+   * @return true if equal, false if not
+   */
+  @Override
+  public boolean equals(Object o) {
+    super.equals(o);
+    if (this == o) {
+      return true;
+    }
+
+    if (o == null || !(o instanceof Expression)) {
+      return false;
+    }
+
+    Expression that = (Expression) o;
+
+    if (operator != null ? !operator.equals(that.operator) : that.operator != null) {
+      return false;
+    }
+    return Arrays.deepEquals(arguments, that.arguments);
+  }
+
+  /**
+   * Returns a hash code value for the expression.
+   *
+   * @return a hash code value for this expression
+   */
+  @Override
+  public int hashCode() {
+    int result = operator != null ? operator.hashCode() : 0;
+    result = 31 * result + Arrays.hashCode(arguments);
+    return result;
+  }
+
+  /**
    * ExpressionLiteral wraps an object to be used as a literal in an expression.
    * <p>
    * ExpressionLiteral is created with {@link #literal(Number)}, {@link #literal(boolean)},
    * {@link #literal(String)} and {@link #literal(Object)}.
    * </p>
    */
-  private static class ExpressionLiteral extends Expression {
+  public static class ExpressionLiteral extends Expression {
 
     protected Object literal;
 
     /**
-     * Create an ExpressionValue wrapper.
+     * Create an expression literal.
      *
-     * @param object the object to be wrapped
+     * @param object the object to be treated as literal
      */
-    ExpressionLiteral(@NonNull Object object) {
+    public ExpressionLiteral(@NonNull Object object) {
       this.literal = object;
     }
 
     /**
-     * Get the wrapped object.
+     * Get the literal object.
      *
-     * @return the wrapped object
+     * @return the literal object
      */
     Object toValue() {
       return literal;
+    }
+
+    /**
+     * Returns a string representation of the expression literal.
+     *
+     * @return a string representation of the object.
+     */
+    @Override
+    public String toString() {
+      return literal.toString();
+    }
+
+    /**
+     * Indicates whether some other object is "equal to" this one.
+     *
+     * @param o the other object
+     * @return true if equal, false if not
+     */
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) {
+        return true;
+      }
+      if (o == null || getClass() != o.getClass()) {
+        return false;
+      }
+      if (!super.equals(o)) {
+        return false;
+      }
+
+      ExpressionLiteral that = (ExpressionLiteral) o;
+
+      return literal != null ? literal.equals(that.literal) : that.literal == null;
+    }
+
+    /**
+     * Returns a hash code value for the expression literal.
+     *
+     * @return a hash code value for this expression literal
+     */
+    @Override
+    public int hashCode() {
+      int result = super.hashCode();
+      result = 31 * result + (literal != null ? literal.hashCode() : 0);
+      return result;
     }
   }
 
@@ -1896,9 +1894,9 @@ public class Expression {
     /**
      * Converts the int color to rgba(d, d, d, d) string representation
      *
-     * @return
+     * @return the string representation of a color
      */
-    public String convertColor() {
+    String convertColor() {
       return PropertyFactory.colorToRgbaString(color);
     }
   }
@@ -1921,9 +1919,38 @@ public class Expression {
     private Object value;
     private Object output;
 
-    public Stop(Object value, Object output) {
+    Stop(Object value, Object output) {
       this.value = value;
       this.output = output;
+    }
+
+    /**
+     * Converts a varargs of Stops to a Expression array.
+     *
+     * @param stops the stops to convert
+     * @return the converted stops as an expression array
+     */
+    static Expression[] toExpressionArray(Stop... stops) {
+      Expression[] expressions = new Expression[stops.length * 2];
+      Stop stop;
+      Object inputValue, outputValue;
+      for (int i = 0; i < stops.length; i++) {
+        stop = stops[i];
+        inputValue = stop.value;
+        outputValue = stop.output;
+
+        if (!(inputValue instanceof Expression)) {
+          inputValue = literal(inputValue);
+        }
+
+        if (!(outputValue instanceof Expression)) {
+          outputValue = literal(outputValue);
+        }
+
+        expressions[i * 2] = (Expression) inputValue;
+        expressions[i * 2 + 1] = (Expression) outputValue;
+      }
+      return expressions;
     }
   }
 }

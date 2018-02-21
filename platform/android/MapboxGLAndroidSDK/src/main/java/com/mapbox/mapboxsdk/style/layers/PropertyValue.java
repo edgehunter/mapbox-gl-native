@@ -4,9 +4,16 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
 import com.mapbox.mapboxsdk.exceptions.ConversionException;
+import com.mapbox.mapboxsdk.style.expressions.Expression;
 import com.mapbox.mapboxsdk.style.functions.Function;
 import com.mapbox.mapboxsdk.utils.ColorUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import timber.log.Timber;
 
@@ -49,6 +56,58 @@ public class PropertyValue<T> {
   }
 
   /**
+   * Returns if this is a expression.
+   *
+   * @return true if this is a expression, false if not
+   */
+  public boolean isExpression() {
+    return !isNull() && value instanceof JsonArray;
+  }
+
+  /**
+   * Get the expression of the property.
+   *
+   * @return the property expression
+   */
+  @Nullable
+  public Expression getExpression() {
+    if (isExpression()) {
+      return convert((JsonArray) value);
+    } else {
+      Timber.w("not a expression, try value");
+      return null;
+    }
+  }
+
+  private Expression convert(JsonArray jsonArray) {
+    final String operator = jsonArray.get(0).getAsString();
+    final List<Expression> arguments = new ArrayList<>();
+
+    JsonElement jsonElement;
+    JsonPrimitive jsonPrimitive;
+    for (int i = 1; i < jsonArray.size(); i++) {
+      jsonElement = jsonArray.get(i);
+      if (jsonElement instanceof JsonArray) {
+        arguments.add(convert((JsonArray) jsonElement));
+      } else if (jsonElement instanceof JsonPrimitive) {
+        jsonPrimitive = (JsonPrimitive) jsonElement;
+        if (jsonPrimitive.isBoolean()) {
+          arguments.add(new Expression.ExpressionLiteral(jsonElement.getAsBoolean()));
+        } else if (jsonPrimitive.isNumber()) {
+          arguments.add(new Expression.ExpressionLiteral(jsonElement.getAsFloat()));
+        } else if (jsonPrimitive.isString()) {
+          arguments.add(new Expression.ExpressionLiteral(jsonElement.getAsString()));
+        } else {
+          throw new RuntimeException("unsupported conversion");
+        }
+      } else {
+        throw new RuntimeException("unsupported conversion");
+      }
+    }
+    return new Expression(operator, arguments.toArray(new Expression[arguments.size()]));
+  }
+
+  /**
    * Returns if this is a value.
    *
    * @return true if is a value, false if not
@@ -58,10 +117,10 @@ public class PropertyValue<T> {
   }
 
   @Nullable
-  public Function<?, T> getFunction() {
+  public Function<T> getFunction() {
     if (isFunction()) {
       // noinspection unchecked
-      return (Function<?, T>) value;
+      return (Function<T>) value;
     } else {
       Timber.w("not a function, try value");
       return null;

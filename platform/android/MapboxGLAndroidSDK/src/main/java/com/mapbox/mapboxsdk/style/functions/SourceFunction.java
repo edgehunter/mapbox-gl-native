@@ -3,10 +3,7 @@ package com.mapbox.mapboxsdk.style.functions;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.mapbox.mapboxsdk.style.functions.stops.Stops;
 import com.mapbox.mapboxsdk.style.layers.PropertyValue;
-
-import java.util.Map;
 
 /**
  * Source functions take Feature property names as input.
@@ -19,28 +16,21 @@ import java.util.Map;
  * property functions is not available across all properties and platforms
  * at this time.
  *
- * @param <I> the input type
  * @param <O> the output type
- * @see Function#property
  */
-public class SourceFunction<I, O> extends Function<I, O> {
+public class SourceFunction<O> extends Function<O> {
 
   private final String property;
   private PropertyValue<O> defaultValue;
 
-  SourceFunction(@NonNull String property, @NonNull Stops<I, O> stops) {
-    this(null, property, stops);
-  }
-
   /**
    * JNI Constructor
    */
-  private SourceFunction(@Nullable O defaultValue, @NonNull String property, @NonNull Stops<I, O> stops) {
-    super(stops);
+  private SourceFunction(@Nullable O defaultValue, @NonNull String property, @NonNull Object expression) {
+    super(expression);
     this.property = property;
     this.defaultValue = defaultValue != null ? new PropertyValue<>(property, defaultValue) : null;
   }
-
 
   /**
    * INTERNAL USAGE ONLY
@@ -57,7 +47,7 @@ public class SourceFunction<I, O> extends Function<I, O> {
    * @param defaultValue the default value to use when no other applies
    * @return this (for chaining)
    */
-  public SourceFunction<I, O> withDefaultValue(PropertyValue<O> defaultValue) {
+  public SourceFunction<O> withDefaultValue(PropertyValue<O> defaultValue) {
     this.defaultValue = defaultValue;
     return this;
   }
@@ -70,16 +60,4 @@ public class SourceFunction<I, O> extends Function<I, O> {
     return defaultValue;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public Map<String, Object> toValueObject() {
-    Map<String, Object> valueObject = super.toValueObject();
-    valueObject.put(PROPERTY_KEY, property);
-    if (defaultValue != null) {
-      valueObject.put(DEFAULT_VALUE_KEY, defaultValue.value);
-    }
-    return valueObject;
-  }
 }
