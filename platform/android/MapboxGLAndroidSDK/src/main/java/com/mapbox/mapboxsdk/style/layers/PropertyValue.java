@@ -9,7 +9,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import com.mapbox.mapboxsdk.exceptions.ConversionException;
 import com.mapbox.mapboxsdk.style.expressions.Expression;
-import com.mapbox.mapboxsdk.style.functions.Function;
 import com.mapbox.mapboxsdk.utils.ColorUtils;
 
 import java.util.ArrayList;
