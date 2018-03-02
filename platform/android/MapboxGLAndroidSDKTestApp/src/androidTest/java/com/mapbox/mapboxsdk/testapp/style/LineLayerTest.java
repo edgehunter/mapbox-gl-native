@@ -7,12 +7,14 @@ import android.support.test.runner.AndroidJUnit4;
 
 import timber.log.Timber;
 
+import com.mapbox.mapboxsdk.style.expressions.Expression;
 import com.mapbox.mapboxsdk.style.layers.LineLayer;
 import com.mapbox.mapboxsdk.testapp.activity.BaseActivityTest;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static com.mapbox.mapboxsdk.style.expressions.Expression.*;
 import static com.mapbox.mapboxsdk.testapp.action.MapboxMapAction.invoke;
 import static org.junit.Assert.*;
 import static com.mapbox.mapboxsdk.style.layers.Property.*;
@@ -112,6 +114,22 @@ public class LineLayerTest extends BaseActivityTest {
   }
 
   @Test
+  public void testLineJoinAsExpression() {
+    validateTestSetup();
+    setupLayer();
+    Timber.i("line-join-expression");
+    invoke(mapboxMap, (uiController, mapboxMap) -> {
+      assertNotNull(layer);
+
+      // Set and Get
+      Expression expression = string(Expression.get("undefined"));
+      layer.setProperties(lineJoin(expression));
+      assertEquals(layer.getLineJoin().getExpression(), expression);
+    });
+  }
+
+
+  @Test
   public void testLineMiterLimitAsConstant() {
     validateTestSetup();
     setupLayer();
@@ -169,6 +187,22 @@ public class LineLayerTest extends BaseActivityTest {
   }
 
   @Test
+  public void testLineOpacityAsExpression() {
+    validateTestSetup();
+    setupLayer();
+    Timber.i("line-opacity-expression");
+    invoke(mapboxMap, (uiController, mapboxMap) -> {
+      assertNotNull(layer);
+
+      // Set and Get
+      Expression expression = number(Expression.get("undefined"));
+      layer.setProperties(lineOpacity(expression));
+      assertEquals(layer.getLineOpacity().getExpression(), expression);
+    });
+  }
+
+
+  @Test
   public void testLineColorTransition() {
     validateTestSetup();
     setupLayer();
@@ -196,6 +230,22 @@ public class LineLayerTest extends BaseActivityTest {
       assertEquals((String) layer.getLineColor().getValue(), (String) "rgba(0, 0, 0, 1)");
     });
   }
+
+  @Test
+  public void testLineColorAsExpression() {
+    validateTestSetup();
+    setupLayer();
+    Timber.i("line-color-expression");
+    invoke(mapboxMap, (uiController, mapboxMap) -> {
+      assertNotNull(layer);
+
+      // Set and Get
+      Expression expression = toColor(Expression.get("undefined"));
+      layer.setProperties(lineColor(expression));
+      assertEquals(layer.getLineColor().getExpression(), expression);
+    });
+  }
+
 
   @Test
   public void testLineColorAsIntConstant() {
@@ -284,6 +334,22 @@ public class LineLayerTest extends BaseActivityTest {
   }
 
   @Test
+  public void testLineWidthAsExpression() {
+    validateTestSetup();
+    setupLayer();
+    Timber.i("line-width-expression");
+    invoke(mapboxMap, (uiController, mapboxMap) -> {
+      assertNotNull(layer);
+
+      // Set and Get
+      Expression expression = number(Expression.get("undefined"));
+      layer.setProperties(lineWidth(expression));
+      assertEquals(layer.getLineWidth().getExpression(), expression);
+    });
+  }
+
+
+  @Test
   public void testLineGapWidthTransition() {
     validateTestSetup();
     setupLayer();
@@ -311,6 +377,22 @@ public class LineLayerTest extends BaseActivityTest {
       assertEquals((Float) layer.getLineGapWidth().getValue(), (Float) 0.3f);
     });
   }
+
+  @Test
+  public void testLineGapWidthAsExpression() {
+    validateTestSetup();
+    setupLayer();
+    Timber.i("line-gap-width-expression");
+    invoke(mapboxMap, (uiController, mapboxMap) -> {
+      assertNotNull(layer);
+
+      // Set and Get
+      Expression expression = number(Expression.get("undefined"));
+      layer.setProperties(lineGapWidth(expression));
+      assertEquals(layer.getLineGapWidth().getExpression(), expression);
+    });
+  }
+
 
   @Test
   public void testLineOffsetTransition() {
@@ -369,6 +451,22 @@ public class LineLayerTest extends BaseActivityTest {
       assertEquals((Float) layer.getLineBlur().getValue(), (Float) 0.3f);
     });
   }
+
+  @Test
+  public void testLineBlurAsExpression() {
+    validateTestSetup();
+    setupLayer();
+    Timber.i("line-blur-expression");
+    invoke(mapboxMap, (uiController, mapboxMap) -> {
+      assertNotNull(layer);
+
+      // Set and Get
+      Expression expression = number(Expression.get("undefined"));
+      layer.setProperties(lineBlur(expression));
+      assertEquals(layer.getLineBlur().getExpression(), expression);
+    });
+  }
+
 
   @Test
   public void testLineDasharrayTransition() {

@@ -202,27 +202,32 @@ public class SymbolGeneratorActivity extends AppCompatActivity implements OnMapR
 
   private static class LoadDataTask extends AsyncTask<Void, Void, FeatureCollection> {
 
-    private SymbolGeneratorActivity activity;
+    private WeakReference<SymbolGeneratorActivity> activity;
 
     LoadDataTask(SymbolGeneratorActivity activity) {
-      this.activity = activity;
+      this.activity = new WeakReference<>(activity);
     }
 
     @Override
     protected FeatureCollection doInBackground(Void... params) {
-      try {
-        // read local geojson from raw folder
-        String tinyCountriesJson = ResourceUtils.readRawResource(activity, R.raw.tiny_countries);
-        return FeatureCollection.fromJson(tinyCountriesJson);
+      Context context = activity.get();
+      if (context != null) {
+        try {
+          // read local geojson from raw folder
+          String tinyCountriesJson = ResourceUtils.readRawResource(context, R.raw.tiny_countries);
+          return FeatureCollection.fromJson(tinyCountriesJson);
 
-      } catch (IOException exception) {
-        return null;
+        } catch (IOException exception) {
+          Timber.e(exception);
+        }
       }
+      return null;
     }
 
     @Override
     protected void onPostExecute(FeatureCollection featureCollection) {
       super.onPostExecute(featureCollection);
+      SymbolGeneratorActivity activity = this.activity.get();
       if (featureCollection == null || activity == null) {
         return;
       }
@@ -277,11 +282,11 @@ public class SymbolGeneratorActivity extends AppCompatActivity implements OnMapR
     mapboxMap.addLayer(symbolLayer);
 
     // get expressions
-    Expression iconImageExpressionResult = symbolLayer.getIconImage().getFunction().getExpression();
-    Expression iconSizeExpressionResult = symbolLayer.getIconSize().getFunction().getExpression();
-    Expression textSizeExpressionResult = symbolLayer.getTextSize().getFunction().getExpression();
-    Expression textFieldExpressionResult = symbolLayer.getTextField().getFunction().getExpression();
-    Expression textColorExpressionResult = symbolLayer.getTextColor().getFunction().getExpression();
+    Expression iconImageExpressionResult = symbolLayer.getIconImage().getExpression();
+    Expression iconSizeExpressionResult = symbolLayer.getIconSize().getExpression();
+    Expression textSizeExpressionResult = symbolLayer.getTextSize().getExpression();
+    Expression textFieldExpressionResult = symbolLayer.getTextField().getExpression();
+    Expression textColorExpressionResult = symbolLayer.getTextColor().getExpression();
 
     // reset expressions
     symbolLayer.setProperties(

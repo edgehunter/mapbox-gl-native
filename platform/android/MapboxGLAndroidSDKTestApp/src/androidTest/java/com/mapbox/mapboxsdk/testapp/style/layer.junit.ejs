@@ -11,12 +11,14 @@ import android.support.test.runner.AndroidJUnit4;
 
 import timber.log.Timber;
 
+import com.mapbox.mapboxsdk.style.expressions.Expression;
 import com.mapbox.mapboxsdk.style.layers.<%- camelize(type) %>Layer;
 import com.mapbox.mapboxsdk.testapp.activity.BaseActivityTest;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static com.mapbox.mapboxsdk.style.expressions.Expression.*;
 import static com.mapbox.mapboxsdk.testapp.action.MapboxMapAction.invoke;
 import static org.junit.Assert.*;
 import static com.mapbox.mapboxsdk.style.layers.Property.*;
@@ -128,11 +130,25 @@ public class <%- camelize(type) %>LayerTest extends BaseActivityTest {
       assertEquals((<%- propertyType(property) %>) layer.get<%- camelize(property.name) %>().getValue(), (<%- propertyType(property) %>) <%- defaultValueJava(property) %>);
     });
   }
-<% if (supportsZoomFunction(property)) { -%>
+<% if (isDataDriven(property)) { -%>
+<% if (!(property.name.endsWith("-font")||property.name.endsWith("-offset"))) { -%>
+
+  @Test
+  public void test<%- camelize(property.name) %>AsExpression() {
+    validateTestSetup();
+    setupLayer();
+    Timber.i("<%- property.name %>-expression");
+    invoke(mapboxMap, (uiController, mapboxMap) -> {
+      assertNotNull(layer);
+
+      // Set and Get
+      Expression expression = <%- defaultExpressionJava(property) %>(Expression.get("undefined"));
+      layer.setProperties(<%- camelizeWithLeadingLowercase(property.name) %>(expression));
+      assertEquals(layer.get<%- camelize(property.name) %>().getExpression(), expression);
+    });
+  }
+
 <% } -%>
-<% if (supportsPropertyFunction(property)) { -%>
-<% } else if (property.type === 'array') { -%>
-<% } else { -%>
 <% } -%>
 <% if (property.type == 'color') { -%>
 

@@ -7,12 +7,14 @@ import android.support.test.runner.AndroidJUnit4;
 
 import timber.log.Timber;
 
+import com.mapbox.mapboxsdk.style.expressions.Expression;
 import com.mapbox.mapboxsdk.style.layers.HeatmapLayer;
 import com.mapbox.mapboxsdk.testapp.activity.BaseActivityTest;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static com.mapbox.mapboxsdk.style.expressions.Expression.*;
 import static com.mapbox.mapboxsdk.testapp.action.MapboxMapAction.invoke;
 import static org.junit.Assert.*;
 import static com.mapbox.mapboxsdk.style.layers.Property.*;
@@ -113,6 +115,22 @@ public class HeatmapLayerTest extends BaseActivityTest {
   }
 
   @Test
+  public void testHeatmapRadiusAsExpression() {
+    validateTestSetup();
+    setupLayer();
+    Timber.i("heatmap-radius-expression");
+    invoke(mapboxMap, (uiController, mapboxMap) -> {
+      assertNotNull(layer);
+
+      // Set and Get
+      Expression expression = number(Expression.get("undefined"));
+      layer.setProperties(heatmapRadius(expression));
+      assertEquals(layer.getHeatmapRadius().getExpression(), expression);
+    });
+  }
+
+
+  @Test
   public void testHeatmapWeightAsConstant() {
     validateTestSetup();
     setupLayer();
@@ -125,6 +143,22 @@ public class HeatmapLayerTest extends BaseActivityTest {
       assertEquals((Float) layer.getHeatmapWeight().getValue(), (Float) 0.3f);
     });
   }
+
+  @Test
+  public void testHeatmapWeightAsExpression() {
+    validateTestSetup();
+    setupLayer();
+    Timber.i("heatmap-weight-expression");
+    invoke(mapboxMap, (uiController, mapboxMap) -> {
+      assertNotNull(layer);
+
+      // Set and Get
+      Expression expression = number(Expression.get("undefined"));
+      layer.setProperties(heatmapWeight(expression));
+      assertEquals(layer.getHeatmapWeight().getExpression(), expression);
+    });
+  }
+
 
   @Test
   public void testHeatmapIntensityTransition() {

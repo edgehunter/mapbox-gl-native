@@ -47,15 +47,6 @@ public class PropertyValue<T> {
   }
 
   /**
-   * Returns if this is a function.
-   *
-   * @return true if is a function, false if not
-   */
-  public boolean isFunction() {
-    return !isNull() && value instanceof Function;
-  }
-
-  /**
    * Returns if this is a expression.
    *
    * @return true if this is a expression, false if not
@@ -79,52 +70,13 @@ public class PropertyValue<T> {
     }
   }
 
-  private Expression convert(JsonArray jsonArray) {
-    final String operator = jsonArray.get(0).getAsString();
-    final List<Expression> arguments = new ArrayList<>();
-
-    JsonElement jsonElement;
-    JsonPrimitive jsonPrimitive;
-    for (int i = 1; i < jsonArray.size(); i++) {
-      jsonElement = jsonArray.get(i);
-      if (jsonElement instanceof JsonArray) {
-        arguments.add(convert((JsonArray) jsonElement));
-      } else if (jsonElement instanceof JsonPrimitive) {
-        jsonPrimitive = (JsonPrimitive) jsonElement;
-        if (jsonPrimitive.isBoolean()) {
-          arguments.add(new Expression.ExpressionLiteral(jsonElement.getAsBoolean()));
-        } else if (jsonPrimitive.isNumber()) {
-          arguments.add(new Expression.ExpressionLiteral(jsonElement.getAsFloat()));
-        } else if (jsonPrimitive.isString()) {
-          arguments.add(new Expression.ExpressionLiteral(jsonElement.getAsString()));
-        } else {
-          throw new RuntimeException("unsupported conversion");
-        }
-      } else {
-        throw new RuntimeException("unsupported conversion");
-      }
-    }
-    return new Expression(operator, arguments.toArray(new Expression[arguments.size()]));
-  }
-
   /**
    * Returns if this is a value.
    *
    * @return true if is a value, false if not
    */
   public boolean isValue() {
-    return !isNull() && !isFunction();
-  }
-
-  @Nullable
-  public Function<T> getFunction() {
-    if (isFunction()) {
-      // noinspection unchecked
-      return (Function<T>) value;
-    } else {
-      Timber.w("not a function, try value");
-      return null;
-    }
+    return !isNull() && !isExpression();
   }
 
   /**
@@ -136,7 +88,7 @@ public class PropertyValue<T> {
   public T getValue() {
     if (isValue()) {
       // noinspection unchecked
-      return (T) value;
+      return value;
     } else {
       Timber.w("not a value, try function");
       return null;
@@ -172,5 +124,33 @@ public class PropertyValue<T> {
   @Override
   public String toString() {
     return String.format("%s: %s", name, value);
+  }
+
+  private Expression convert(JsonArray jsonArray) {
+    final String operator = jsonArray.get(0).getAsString();
+    final List<Expression> arguments = new ArrayList<>();
+
+    JsonElement jsonElement;
+    JsonPrimitive jsonPrimitive;
+    for (int i = 1; i < jsonArray.size(); i++) {
+      jsonElement = jsonArray.get(i);
+      if (jsonElement instanceof JsonArray) {
+        arguments.add(convert((JsonArray) jsonElement));
+      } else if (jsonElement instanceof JsonPrimitive) {
+        jsonPrimitive = (JsonPrimitive) jsonElement;
+        if (jsonPrimitive.isBoolean()) {
+          arguments.add(new Expression.ExpressionLiteral(jsonElement.getAsBoolean()));
+        } else if (jsonPrimitive.isNumber()) {
+          arguments.add(new Expression.ExpressionLiteral(jsonElement.getAsFloat()));
+        } else if (jsonPrimitive.isString()) {
+          arguments.add(new Expression.ExpressionLiteral(jsonElement.getAsString()));
+        } else {
+          throw new RuntimeException("unsupported conversion");
+        }
+      } else {
+        throw new RuntimeException("unsupported conversion");
+      }
+    }
+    return new Expression(operator, arguments.toArray(new Expression[arguments.size()]));
   }
 }

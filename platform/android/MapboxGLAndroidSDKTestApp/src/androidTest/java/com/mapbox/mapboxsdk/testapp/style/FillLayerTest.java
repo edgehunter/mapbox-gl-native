@@ -7,12 +7,14 @@ import android.support.test.runner.AndroidJUnit4;
 
 import timber.log.Timber;
 
+import com.mapbox.mapboxsdk.style.expressions.Expression;
 import com.mapbox.mapboxsdk.style.layers.FillLayer;
 import com.mapbox.mapboxsdk.testapp.activity.BaseActivityTest;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static com.mapbox.mapboxsdk.style.expressions.Expression.*;
 import static com.mapbox.mapboxsdk.testapp.action.MapboxMapAction.invoke;
 import static org.junit.Assert.*;
 import static com.mapbox.mapboxsdk.style.layers.Property.*;
@@ -127,6 +129,22 @@ public class FillLayerTest extends BaseActivityTest {
   }
 
   @Test
+  public void testFillOpacityAsExpression() {
+    validateTestSetup();
+    setupLayer();
+    Timber.i("fill-opacity-expression");
+    invoke(mapboxMap, (uiController, mapboxMap) -> {
+      assertNotNull(layer);
+
+      // Set and Get
+      Expression expression = number(Expression.get("undefined"));
+      layer.setProperties(fillOpacity(expression));
+      assertEquals(layer.getFillOpacity().getExpression(), expression);
+    });
+  }
+
+
+  @Test
   public void testFillColorTransition() {
     validateTestSetup();
     setupLayer();
@@ -154,6 +172,22 @@ public class FillLayerTest extends BaseActivityTest {
       assertEquals((String) layer.getFillColor().getValue(), (String) "rgba(0, 0, 0, 1)");
     });
   }
+
+  @Test
+  public void testFillColorAsExpression() {
+    validateTestSetup();
+    setupLayer();
+    Timber.i("fill-color-expression");
+    invoke(mapboxMap, (uiController, mapboxMap) -> {
+      assertNotNull(layer);
+
+      // Set and Get
+      Expression expression = toColor(Expression.get("undefined"));
+      layer.setProperties(fillColor(expression));
+      assertEquals(layer.getFillColor().getExpression(), expression);
+    });
+  }
+
 
   @Test
   public void testFillColorAsIntConstant() {
@@ -197,6 +231,22 @@ public class FillLayerTest extends BaseActivityTest {
       assertEquals((String) layer.getFillOutlineColor().getValue(), (String) "rgba(0, 0, 0, 1)");
     });
   }
+
+  @Test
+  public void testFillOutlineColorAsExpression() {
+    validateTestSetup();
+    setupLayer();
+    Timber.i("fill-outline-color-expression");
+    invoke(mapboxMap, (uiController, mapboxMap) -> {
+      assertNotNull(layer);
+
+      // Set and Get
+      Expression expression = toColor(Expression.get("undefined"));
+      layer.setProperties(fillOutlineColor(expression));
+      assertEquals(layer.getFillOutlineColor().getExpression(), expression);
+    });
+  }
+
 
   @Test
   public void testFillOutlineColorAsIntConstant() {

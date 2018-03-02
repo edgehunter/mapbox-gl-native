@@ -81,7 +81,7 @@ public class ExpressionTest extends BaseActivityTest {
       );
 
       // get actual expression
-      Expression actualExpression = layer.getFillColor().getFunction().getExpression();
+      Expression actualExpression = layer.getFillColor().getExpression();
 
       // create wrapped expected expression
       Expression expectedExpression = toColor(get("fill"));
@@ -112,7 +112,7 @@ public class ExpressionTest extends BaseActivityTest {
       );
 
       // get camera function expression
-      Expression outputExpression = layer.getFillColor().getFunction().getExpression();
+      Expression outputExpression = layer.getFillColor().getExpression();
 
       // compare
       assertEquals("input expression should match", inputExpression, outputExpression);
@@ -135,7 +135,7 @@ public class ExpressionTest extends BaseActivityTest {
       );
 
       // get camera function expression
-      Expression outputExpression = layer.getFillColor().getFunction().getExpression();
+      Expression outputExpression = layer.getFillColor().getExpression();
 
       // compare
       assertEquals("input expression should match", inputExpression, outputExpression);
@@ -170,7 +170,7 @@ public class ExpressionTest extends BaseActivityTest {
       );
 
       // get camera function expression
-      Expression outputExpression = layer.getFillColor().getFunction().getExpression();
+      Expression outputExpression = layer.getFillColor().getExpression();
 
       // compare
       assertEquals("input expression should match", inputExpression, outputExpression);

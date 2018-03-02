@@ -7,12 +7,14 @@ import android.support.test.runner.AndroidJUnit4;
 
 import timber.log.Timber;
 
+import com.mapbox.mapboxsdk.style.expressions.Expression;
 import com.mapbox.mapboxsdk.style.layers.FillExtrusionLayer;
 import com.mapbox.mapboxsdk.testapp.activity.BaseActivityTest;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static com.mapbox.mapboxsdk.style.expressions.Expression.*;
 import static com.mapbox.mapboxsdk.testapp.action.MapboxMapAction.invoke;
 import static org.junit.Assert.*;
 import static com.mapbox.mapboxsdk.style.layers.Property.*;
@@ -142,6 +144,22 @@ public class FillExtrusionLayerTest extends BaseActivityTest {
   }
 
   @Test
+  public void testFillExtrusionColorAsExpression() {
+    validateTestSetup();
+    setupLayer();
+    Timber.i("fill-extrusion-color-expression");
+    invoke(mapboxMap, (uiController, mapboxMap) -> {
+      assertNotNull(layer);
+
+      // Set and Get
+      Expression expression = toColor(Expression.get("undefined"));
+      layer.setProperties(fillExtrusionColor(expression));
+      assertEquals(layer.getFillExtrusionColor().getExpression(), expression);
+    });
+  }
+
+
+  @Test
   public void testFillExtrusionColorAsIntConstant() {
     validateTestSetup();
     setupLayer();
@@ -257,6 +275,22 @@ public class FillExtrusionLayerTest extends BaseActivityTest {
   }
 
   @Test
+  public void testFillExtrusionHeightAsExpression() {
+    validateTestSetup();
+    setupLayer();
+    Timber.i("fill-extrusion-height-expression");
+    invoke(mapboxMap, (uiController, mapboxMap) -> {
+      assertNotNull(layer);
+
+      // Set and Get
+      Expression expression = number(Expression.get("undefined"));
+      layer.setProperties(fillExtrusionHeight(expression));
+      assertEquals(layer.getFillExtrusionHeight().getExpression(), expression);
+    });
+  }
+
+
+  @Test
   public void testFillExtrusionBaseTransition() {
     validateTestSetup();
     setupLayer();
@@ -284,4 +318,20 @@ public class FillExtrusionLayerTest extends BaseActivityTest {
       assertEquals((Float) layer.getFillExtrusionBase().getValue(), (Float) 0.3f);
     });
   }
+
+  @Test
+  public void testFillExtrusionBaseAsExpression() {
+    validateTestSetup();
+    setupLayer();
+    Timber.i("fill-extrusion-base-expression");
+    invoke(mapboxMap, (uiController, mapboxMap) -> {
+      assertNotNull(layer);
+
+      // Set and Get
+      Expression expression = number(Expression.get("undefined"));
+      layer.setProperties(fillExtrusionBase(expression));
+      assertEquals(layer.getFillExtrusionBase().getExpression(), expression);
+    });
+  }
+
 }

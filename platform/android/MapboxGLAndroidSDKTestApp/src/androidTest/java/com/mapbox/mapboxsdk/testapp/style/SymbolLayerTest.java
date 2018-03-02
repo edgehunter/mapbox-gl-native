@@ -7,12 +7,14 @@ import android.support.test.runner.AndroidJUnit4;
 
 import timber.log.Timber;
 
+import com.mapbox.mapboxsdk.style.expressions.Expression;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.testapp.activity.BaseActivityTest;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static com.mapbox.mapboxsdk.style.expressions.Expression.*;
 import static com.mapbox.mapboxsdk.testapp.action.MapboxMapAction.invoke;
 import static org.junit.Assert.*;
 import static com.mapbox.mapboxsdk.style.layers.Property.*;
@@ -196,6 +198,22 @@ public class SymbolLayerTest extends BaseActivityTest {
   }
 
   @Test
+  public void testIconSizeAsExpression() {
+    validateTestSetup();
+    setupLayer();
+    Timber.i("icon-size-expression");
+    invoke(mapboxMap, (uiController, mapboxMap) -> {
+      assertNotNull(layer);
+
+      // Set and Get
+      Expression expression = number(Expression.get("undefined"));
+      layer.setProperties(iconSize(expression));
+      assertEquals(layer.getIconSize().getExpression(), expression);
+    });
+  }
+
+
+  @Test
   public void testIconTextFitAsConstant() {
     validateTestSetup();
     setupLayer();
@@ -238,6 +256,22 @@ public class SymbolLayerTest extends BaseActivityTest {
   }
 
   @Test
+  public void testIconImageAsExpression() {
+    validateTestSetup();
+    setupLayer();
+    Timber.i("icon-image-expression");
+    invoke(mapboxMap, (uiController, mapboxMap) -> {
+      assertNotNull(layer);
+
+      // Set and Get
+      Expression expression = string(Expression.get("undefined"));
+      layer.setProperties(iconImage(expression));
+      assertEquals(layer.getIconImage().getExpression(), expression);
+    });
+  }
+
+
+  @Test
   public void testIconRotateAsConstant() {
     validateTestSetup();
     setupLayer();
@@ -250,6 +284,22 @@ public class SymbolLayerTest extends BaseActivityTest {
       assertEquals((Float) layer.getIconRotate().getValue(), (Float) 0.3f);
     });
   }
+
+  @Test
+  public void testIconRotateAsExpression() {
+    validateTestSetup();
+    setupLayer();
+    Timber.i("icon-rotate-expression");
+    invoke(mapboxMap, (uiController, mapboxMap) -> {
+      assertNotNull(layer);
+
+      // Set and Get
+      Expression expression = number(Expression.get("undefined"));
+      layer.setProperties(iconRotate(expression));
+      assertEquals(layer.getIconRotate().getExpression(), expression);
+    });
+  }
+
 
   @Test
   public void testIconPaddingAsConstant() {
@@ -308,6 +358,22 @@ public class SymbolLayerTest extends BaseActivityTest {
   }
 
   @Test
+  public void testIconAnchorAsExpression() {
+    validateTestSetup();
+    setupLayer();
+    Timber.i("icon-anchor-expression");
+    invoke(mapboxMap, (uiController, mapboxMap) -> {
+      assertNotNull(layer);
+
+      // Set and Get
+      Expression expression = string(Expression.get("undefined"));
+      layer.setProperties(iconAnchor(expression));
+      assertEquals(layer.getIconAnchor().getExpression(), expression);
+    });
+  }
+
+
+  @Test
   public void testIconPitchAlignmentAsConstant() {
     validateTestSetup();
     setupLayer();
@@ -364,6 +430,22 @@ public class SymbolLayerTest extends BaseActivityTest {
   }
 
   @Test
+  public void testTextFieldAsExpression() {
+    validateTestSetup();
+    setupLayer();
+    Timber.i("text-field-expression");
+    invoke(mapboxMap, (uiController, mapboxMap) -> {
+      assertNotNull(layer);
+
+      // Set and Get
+      Expression expression = string(Expression.get("undefined"));
+      layer.setProperties(textField(expression));
+      assertEquals(layer.getTextField().getExpression(), expression);
+    });
+  }
+
+
+  @Test
   public void testTextFontAsConstant() {
     validateTestSetup();
     setupLayer();
@@ -392,6 +474,22 @@ public class SymbolLayerTest extends BaseActivityTest {
   }
 
   @Test
+  public void testTextSizeAsExpression() {
+    validateTestSetup();
+    setupLayer();
+    Timber.i("text-size-expression");
+    invoke(mapboxMap, (uiController, mapboxMap) -> {
+      assertNotNull(layer);
+
+      // Set and Get
+      Expression expression = number(Expression.get("undefined"));
+      layer.setProperties(textSize(expression));
+      assertEquals(layer.getTextSize().getExpression(), expression);
+    });
+  }
+
+
+  @Test
   public void testTextMaxWidthAsConstant() {
     validateTestSetup();
     setupLayer();
@@ -404,6 +502,22 @@ public class SymbolLayerTest extends BaseActivityTest {
       assertEquals((Float) layer.getTextMaxWidth().getValue(), (Float) 0.3f);
     });
   }
+
+  @Test
+  public void testTextMaxWidthAsExpression() {
+    validateTestSetup();
+    setupLayer();
+    Timber.i("text-max-width-expression");
+    invoke(mapboxMap, (uiController, mapboxMap) -> {
+      assertNotNull(layer);
+
+      // Set and Get
+      Expression expression = number(Expression.get("undefined"));
+      layer.setProperties(textMaxWidth(expression));
+      assertEquals(layer.getTextMaxWidth().getExpression(), expression);
+    });
+  }
+
 
   @Test
   public void testTextLineHeightAsConstant() {
@@ -434,6 +548,22 @@ public class SymbolLayerTest extends BaseActivityTest {
   }
 
   @Test
+  public void testTextLetterSpacingAsExpression() {
+    validateTestSetup();
+    setupLayer();
+    Timber.i("text-letter-spacing-expression");
+    invoke(mapboxMap, (uiController, mapboxMap) -> {
+      assertNotNull(layer);
+
+      // Set and Get
+      Expression expression = number(Expression.get("undefined"));
+      layer.setProperties(textLetterSpacing(expression));
+      assertEquals(layer.getTextLetterSpacing().getExpression(), expression);
+    });
+  }
+
+
+  @Test
   public void testTextJustifyAsConstant() {
     validateTestSetup();
     setupLayer();
@@ -448,6 +578,22 @@ public class SymbolLayerTest extends BaseActivityTest {
   }
 
   @Test
+  public void testTextJustifyAsExpression() {
+    validateTestSetup();
+    setupLayer();
+    Timber.i("text-justify-expression");
+    invoke(mapboxMap, (uiController, mapboxMap) -> {
+      assertNotNull(layer);
+
+      // Set and Get
+      Expression expression = string(Expression.get("undefined"));
+      layer.setProperties(textJustify(expression));
+      assertEquals(layer.getTextJustify().getExpression(), expression);
+    });
+  }
+
+
+  @Test
   public void testTextAnchorAsConstant() {
     validateTestSetup();
     setupLayer();
@@ -460,6 +606,22 @@ public class SymbolLayerTest extends BaseActivityTest {
       assertEquals((String) layer.getTextAnchor().getValue(), (String) TEXT_ANCHOR_CENTER);
     });
   }
+
+  @Test
+  public void testTextAnchorAsExpression() {
+    validateTestSetup();
+    setupLayer();
+    Timber.i("text-anchor-expression");
+    invoke(mapboxMap, (uiController, mapboxMap) -> {
+      assertNotNull(layer);
+
+      // Set and Get
+      Expression expression = string(Expression.get("undefined"));
+      layer.setProperties(textAnchor(expression));
+      assertEquals(layer.getTextAnchor().getExpression(), expression);
+    });
+  }
+
 
   @Test
   public void testTextMaxAngleAsConstant() {
@@ -488,6 +650,22 @@ public class SymbolLayerTest extends BaseActivityTest {
       assertEquals((Float) layer.getTextRotate().getValue(), (Float) 0.3f);
     });
   }
+
+  @Test
+  public void testTextRotateAsExpression() {
+    validateTestSetup();
+    setupLayer();
+    Timber.i("text-rotate-expression");
+    invoke(mapboxMap, (uiController, mapboxMap) -> {
+      assertNotNull(layer);
+
+      // Set and Get
+      Expression expression = number(Expression.get("undefined"));
+      layer.setProperties(textRotate(expression));
+      assertEquals(layer.getTextRotate().getExpression(), expression);
+    });
+  }
+
 
   @Test
   public void testTextPaddingAsConstant() {
@@ -530,6 +708,22 @@ public class SymbolLayerTest extends BaseActivityTest {
       assertEquals((String) layer.getTextTransform().getValue(), (String) TEXT_TRANSFORM_NONE);
     });
   }
+
+  @Test
+  public void testTextTransformAsExpression() {
+    validateTestSetup();
+    setupLayer();
+    Timber.i("text-transform-expression");
+    invoke(mapboxMap, (uiController, mapboxMap) -> {
+      assertNotNull(layer);
+
+      // Set and Get
+      Expression expression = string(Expression.get("undefined"));
+      layer.setProperties(textTransform(expression));
+      assertEquals(layer.getTextTransform().getExpression(), expression);
+    });
+  }
+
 
   @Test
   public void testTextOffsetAsConstant() {
@@ -617,6 +811,22 @@ public class SymbolLayerTest extends BaseActivityTest {
   }
 
   @Test
+  public void testIconOpacityAsExpression() {
+    validateTestSetup();
+    setupLayer();
+    Timber.i("icon-opacity-expression");
+    invoke(mapboxMap, (uiController, mapboxMap) -> {
+      assertNotNull(layer);
+
+      // Set and Get
+      Expression expression = number(Expression.get("undefined"));
+      layer.setProperties(iconOpacity(expression));
+      assertEquals(layer.getIconOpacity().getExpression(), expression);
+    });
+  }
+
+
+  @Test
   public void testIconColorTransition() {
     validateTestSetup();
     setupLayer();
@@ -644,6 +854,22 @@ public class SymbolLayerTest extends BaseActivityTest {
       assertEquals((String) layer.getIconColor().getValue(), (String) "rgba(0, 0, 0, 1)");
     });
   }
+
+  @Test
+  public void testIconColorAsExpression() {
+    validateTestSetup();
+    setupLayer();
+    Timber.i("icon-color-expression");
+    invoke(mapboxMap, (uiController, mapboxMap) -> {
+      assertNotNull(layer);
+
+      // Set and Get
+      Expression expression = toColor(Expression.get("undefined"));
+      layer.setProperties(iconColor(expression));
+      assertEquals(layer.getIconColor().getExpression(), expression);
+    });
+  }
+
 
   @Test
   public void testIconColorAsIntConstant() {
@@ -689,6 +915,22 @@ public class SymbolLayerTest extends BaseActivityTest {
   }
 
   @Test
+  public void testIconHaloColorAsExpression() {
+    validateTestSetup();
+    setupLayer();
+    Timber.i("icon-halo-color-expression");
+    invoke(mapboxMap, (uiController, mapboxMap) -> {
+      assertNotNull(layer);
+
+      // Set and Get
+      Expression expression = toColor(Expression.get("undefined"));
+      layer.setProperties(iconHaloColor(expression));
+      assertEquals(layer.getIconHaloColor().getExpression(), expression);
+    });
+  }
+
+
+  @Test
   public void testIconHaloColorAsIntConstant() {
     validateTestSetup();
     setupLayer();
@@ -732,6 +974,22 @@ public class SymbolLayerTest extends BaseActivityTest {
   }
 
   @Test
+  public void testIconHaloWidthAsExpression() {
+    validateTestSetup();
+    setupLayer();
+    Timber.i("icon-halo-width-expression");
+    invoke(mapboxMap, (uiController, mapboxMap) -> {
+      assertNotNull(layer);
+
+      // Set and Get
+      Expression expression = number(Expression.get("undefined"));
+      layer.setProperties(iconHaloWidth(expression));
+      assertEquals(layer.getIconHaloWidth().getExpression(), expression);
+    });
+  }
+
+
+  @Test
   public void testIconHaloBlurTransition() {
     validateTestSetup();
     setupLayer();
@@ -759,6 +1017,22 @@ public class SymbolLayerTest extends BaseActivityTest {
       assertEquals((Float) layer.getIconHaloBlur().getValue(), (Float) 0.3f);
     });
   }
+
+  @Test
+  public void testIconHaloBlurAsExpression() {
+    validateTestSetup();
+    setupLayer();
+    Timber.i("icon-halo-blur-expression");
+    invoke(mapboxMap, (uiController, mapboxMap) -> {
+      assertNotNull(layer);
+
+      // Set and Get
+      Expression expression = number(Expression.get("undefined"));
+      layer.setProperties(iconHaloBlur(expression));
+      assertEquals(layer.getIconHaloBlur().getExpression(), expression);
+    });
+  }
+
 
   @Test
   public void testIconTranslateTransition() {
@@ -833,6 +1107,22 @@ public class SymbolLayerTest extends BaseActivityTest {
   }
 
   @Test
+  public void testTextOpacityAsExpression() {
+    validateTestSetup();
+    setupLayer();
+    Timber.i("text-opacity-expression");
+    invoke(mapboxMap, (uiController, mapboxMap) -> {
+      assertNotNull(layer);
+
+      // Set and Get
+      Expression expression = number(Expression.get("undefined"));
+      layer.setProperties(textOpacity(expression));
+      assertEquals(layer.getTextOpacity().getExpression(), expression);
+    });
+  }
+
+
+  @Test
   public void testTextColorTransition() {
     validateTestSetup();
     setupLayer();
@@ -860,6 +1150,22 @@ public class SymbolLayerTest extends BaseActivityTest {
       assertEquals((String) layer.getTextColor().getValue(), (String) "rgba(0, 0, 0, 1)");
     });
   }
+
+  @Test
+  public void testTextColorAsExpression() {
+    validateTestSetup();
+    setupLayer();
+    Timber.i("text-color-expression");
+    invoke(mapboxMap, (uiController, mapboxMap) -> {
+      assertNotNull(layer);
+
+      // Set and Get
+      Expression expression = toColor(Expression.get("undefined"));
+      layer.setProperties(textColor(expression));
+      assertEquals(layer.getTextColor().getExpression(), expression);
+    });
+  }
+
 
   @Test
   public void testTextColorAsIntConstant() {
@@ -905,6 +1211,22 @@ public class SymbolLayerTest extends BaseActivityTest {
   }
 
   @Test
+  public void testTextHaloColorAsExpression() {
+    validateTestSetup();
+    setupLayer();
+    Timber.i("text-halo-color-expression");
+    invoke(mapboxMap, (uiController, mapboxMap) -> {
+      assertNotNull(layer);
+
+      // Set and Get
+      Expression expression = toColor(Expression.get("undefined"));
+      layer.setProperties(textHaloColor(expression));
+      assertEquals(layer.getTextHaloColor().getExpression(), expression);
+    });
+  }
+
+
+  @Test
   public void testTextHaloColorAsIntConstant() {
     validateTestSetup();
     setupLayer();
@@ -948,6 +1270,22 @@ public class SymbolLayerTest extends BaseActivityTest {
   }
 
   @Test
+  public void testTextHaloWidthAsExpression() {
+    validateTestSetup();
+    setupLayer();
+    Timber.i("text-halo-width-expression");
+    invoke(mapboxMap, (uiController, mapboxMap) -> {
+      assertNotNull(layer);
+
+      // Set and Get
+      Expression expression = number(Expression.get("undefined"));
+      layer.setProperties(textHaloWidth(expression));
+      assertEquals(layer.getTextHaloWidth().getExpression(), expression);
+    });
+  }
+
+
+  @Test
   public void testTextHaloBlurTransition() {
     validateTestSetup();
     setupLayer();
@@ -975,6 +1313,22 @@ public class SymbolLayerTest extends BaseActivityTest {
       assertEquals((Float) layer.getTextHaloBlur().getValue(), (Float) 0.3f);
     });
   }
+
+  @Test
+  public void testTextHaloBlurAsExpression() {
+    validateTestSetup();
+    setupLayer();
+    Timber.i("text-halo-blur-expression");
+    invoke(mapboxMap, (uiController, mapboxMap) -> {
+      assertNotNull(layer);
+
+      // Set and Get
+      Expression expression = number(Expression.get("undefined"));
+      layer.setProperties(textHaloBlur(expression));
+      assertEquals(layer.getTextHaloBlur().getExpression(), expression);
+    });
+  }
+
 
   @Test
   public void testTextTranslateTransition() {
